@@ -26,12 +26,13 @@ resource "aws_route53_record" "a-records" {
   records = [aws_instance.instances[each.key].private_ip]
 }
 
-depends_on = [
-  aws_instance.instances,
-  aws_route53_record.a-records
-]
-
 resource "null_resource" "ansible" {
+
+  depends_on = [
+    aws_instance.instances,
+    aws_route53_record.a-records
+  ]
+
   for_each      = var.components
 
   provisioner "remote-exec" {
